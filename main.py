@@ -1,0 +1,82 @@
+from flask import Flask, render_template, request, jsonify
+import json
+
+# Inicializace aplikace Flask
+app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
+
+# Pokusíme se načíst data z JSON souboru, pokud neexistuje, vytvoříme prázdný seznam
+try:
+    with open('registered_people.json', 'r') as file:
+        registered_people = json.load(file)
+except Exception:
+    registered_people = []
+
+
+# Hlavní stránka - zobrazuje seznam registrovaných osob
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('prvni_stranka.html', registered_people=registered_people), 200
+
+
+# Stránka pro registraci nových osob
+@app.route('/registrace', methods=['GET', 'POST'])
+def druha_stranka():
+    return render_template('druha_stranka.html', zprava="Tajná zpráva.."), 200
+
+
+# Zpracování registrace nové osoby
+@app.route('/zpracuj_registraci', methods=['POST'])
+def zpracuj_registraci():
+    data = request.form
+
+    nick = data.get('nick')
+    jmeno = data.get('jmeno')
+    prijmeni = data.get('prijmeni')
+    pohlavi = data.get('pohlavi')
+    je_plavec = data.get('je_plavec')
+    kanoe_kamarad = data.get('kanoe_kamarad')
+
+    if je_plavec != '1':
+        message = 'Je potřeba umět plavat.'
+        status_code = 400
+    elif not (nick.isalnum() and 2 <= len(nick) <= 20):
+        message = 'Nick musí obsahovat pouze písmena a číslice a mít délku 2 až 20 znaků.'
+        status_code = 400
+    elif kanoe_kamarad and not (kanoe_kamarad.isalnum() and 2 <= len(kanoe_kamarad) <= 20):
+        message = 'Kamarád na lodi musí obsahovat pouze písmena a číslice a mít délku 2 až 20 znaků.'
+        status_code = 400
+    elif any(person['nick'] == nick for person in registered_people):
+        message = 'Toto jméno už je obsazené'
+        status_code = 400
+    else:
+        registered_people.append({
+            'nick': nick,
+            'jmeno': jmeno,
+            'prijmeni': prijmeni,
+            'pohlavi': pohlavi,
+            'je_plavec': je_plavec,
+            'kanoe_kamarad': kanoe_kamarad
+        })
+        save_data()
+        message = 'Registrace byla úspěšně uložena.'
+        status_code = 200
+
+    return render_template('druha_stranka.html', message=message), status_code
+
+
+# API pro ověření dostupnosti jména
+@app.route('/api/check-nickname/<nick>', methods=['GET'])
+def check_nickname(nick):
+    if any(person['nick'] == nick for person in registered_people):
+        return jsonify({'exists': True})
+    return jsonify({'exists': False})
+
+
+# Funkce pro uložení dat do JSON souboru
+def save_data():
+    with open('registered_people.json', 'w') as file:
+        json.dump(registered_people, file)
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
