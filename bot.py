@@ -30,7 +30,7 @@ async def send_discord_message(message_content):
 
 
 def run_discord_bot():
-    TOKEN = 'MTE2NDU5MTc3NzAyMjQ3NjQzMQ.GwVj2g.vREtc-oH1JuowWj1RP1PBGhldx6ghjkVeZYzKk'
+    TOKEN = '' # Přidat token
 
     @client.event
     async def on_ready():
