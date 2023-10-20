@@ -70,14 +70,11 @@
     </style>
 </head>
 <body>
+<!-- Odkaz pro návrat -->
+<a href="/">Zpět</a>
+
 <!-- Nadpis stránky -->
 <h1>Recenze</h1>
-
-<!-- Seznam recenzí -->
-<h2>Seznam recenzí:</h2>
-<div id="reviews">
-    <!-- Recenze budou zobrazeny zde -->
-</div>
 
 <!-- Formulář pro přidání recenze -->
 <form id="reviewForm">
@@ -90,6 +87,12 @@
     <br>
     <input type="submit" value="Odeslat recenzi">
 </form>
+
+<!-- Seznam recenzí -->
+<h2>Seznam recenzí:</h2>
+<div id="reviews">
+    <!-- Recenze budou zobrazeny zde -->
+</div>
 
 <script>
     // Pole pro ukládání recenzí
@@ -105,9 +108,9 @@
             reviewElement.innerHTML = `
                 <strong>Jméno:</strong> ${review.name}<br>
                 <strong>Recenze:</strong> ${review.comment}
-            `;
+            `
             reviewsDiv.appendChild(reviewElement);
-        });
+        })
     }
 
     // Obsluha odeslání formuláře
