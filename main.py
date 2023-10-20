@@ -121,24 +121,4 @@ def save_data():
         json.dump(registered_people, file)
 
 
-def run_discord_bot():
-    bot.run_discord_bot()
-
-
-def run_flask_app():
-    app.run(host='0.0.0.0', port=8080)
-
-
-if __name__ == '__main__':
-    # Create a ThreadPoolExecutor or ProcessPoolExecutor, depending on your preference
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        # Run the functions concurrently
-        discord_bot_thread = threading.Thread(target=run_discord_bot)
-        discord_bot_thread.start()
-
-        flask_app_thread = threading.Thread(target=run_flask_app)
-        flask_app_thread.start()
-
-        # Wait for both threads to finish
-        discord_bot_thread.join()
-        flask_app_thread.join()
+app.run(host='0.0.0.0', port=8080)
