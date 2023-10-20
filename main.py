@@ -16,6 +16,40 @@ except Exception:
     registered_people = []
 
 
+# Pošle email o nové registraci
+def send_email():
+    global server
+    import smtplib
+    from email.mime.text import MIMEText
+    from email.mime.multipart import MIMEMultipart
+
+    # Email configuration
+    sender_email = 'testovaciemailjecna@gmail.com' # 36XiJoZ8
+    receiver_email = 'krupa@spsejecna.cz'
+    app_password = 'adlo zwxf nspe vtyl'
+    subject = 'Nový uživatel'
+    message = 'Právě se registroval nový uživatel'
+
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(message, 'plain'))
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(sender_email, app_password)
+
+        server.sendmail(sender_email, receiver_email, msg.as_string())
+        print('Email sent successfully!')
+    except Exception as e:
+        print(f'Error: {e}')
+    finally:
+        server.quit()
+
+
 # Hlavní stránka - zobrazuje seznam registrovaných osob
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -63,9 +97,7 @@ def zpracuj_registraci():
         })
         save_data()
         message = 'Registrace byla úspěšně uložena.'
-        # TODO poslat zprávu na discord
-        # bot.send_discord_message('gg')
-        
+        send_email()
         status_code = 200
 
     return render_template('druha_stranka.html', message=message), status_code
