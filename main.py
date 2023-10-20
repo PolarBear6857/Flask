@@ -24,7 +24,7 @@ def send_email():
     from email.mime.multipart import MIMEMultipart
 
     # Email configuration
-    sender_email = 'testovaciemailjecna@gmail.com' # 36XiJoZ8
+    sender_email = 'testovaciemailjecna@gmail.com'
     receiver_email = 'krupa@spsejecna.cz'
     app_password = 'adlo zwxf nspe vtyl'
     subject = 'Nový uživatel'
@@ -60,6 +60,11 @@ def index():
 @app.route('/registrace', methods=['GET', 'POST'])
 def druha_stranka():
     return render_template('druha_stranka.html', zprava="Tajná zpráva.."), 200
+
+
+@app.route('/feedback', methods=['GET', 'POST'])
+def treti_stranka():
+    return render_template('treti_stranka.html', zprava="Tajná zpráva.."), 200
 
 
 # Zpracování registrace nové osoby

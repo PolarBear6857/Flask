@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <!-- Nastavení titulku stránky -->
+    <title>Stránka s recenzemi</title>
+
+    <!-- Nastavení viewportu pro responzivní design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Stylování stránky pomocí CSS -->
+    <style>
+        /* Základní styl pro celou stránku */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        /* Styl nadpisu první úrovně */
+        h1 {
+            color: #007BFF;
+            font-size: 24px;
+        }
+
+        /* Styl odkazů */
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        /* Styl pro zobrazování recenzí */
+        .review {
+            border: 3px solid black;
+            max-width: 400px;
+            padding: 10px;
+            margin: 10px auto;
+            font-size: 18px;
+        }
+
+        /* Styl pro formulář */
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Reagování na menší obrazovky */
+        @media only screen and (max-width: 600px) {
+            h1 {
+                font-size: 200%;
+            }
+
+            a {
+                font-size: 200%;
+            }
+
+            .review {
+                max-width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Nadpis stránky -->
+<h1>Recenze</h1>
+
+<!-- Seznam recenzí -->
+<h2>Seznam recenzí:</h2>
+<div id="reviews">
+    <!-- Recenze budou zobrazeny zde -->
+</div>
+
+<!-- Formulář pro přidání recenze -->
+<form id="reviewForm">
+    <h2>Přidejte recenzi</h2>
+    <label for="name">Vaše jméno:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="comment">Vaše recenze:</label>
+    <textarea id="comment" name="comment" rows="4" cols="50" required></textarea>
+    <br>
+    <input type="submit" value="Odeslat recenzi">
+</form>
+
+<script>
+    // Pole pro ukládání recenzí
+    let reviews = [];
+
+    // Funkce pro zobrazení recenzí na stránce
+    function displayReviews() {
+        const reviewsDiv = document.getElementById("reviews");
+        reviewsDiv.innerHTML = "";
+        reviews.forEach((review, index) => {
+            const reviewElement = document.createElement("div");
+            reviewElement.className = "review";
+            reviewElement.innerHTML = `
+                <strong>Jméno:</strong> ${review.name}<br>
+                <strong>Recenze:</strong> ${review.comment}
+            `;
+            reviewsDiv.appendChild(reviewElement);
+        });
+    }
+
+    // Obsluha odeslání formuláře
+    const reviewForm = document.getElementById("reviewForm");
+    reviewForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const comment = document.getElementById("comment").value;
+        reviews.push({name, comment});
+        displayReviews();
+        reviewForm.reset();
+    });
+
+    // Zobrazit počáteční recenze, pokud jsou nějaké k dispozici
+    displayReviews();
+</script>
+
+</body>
+</html>
