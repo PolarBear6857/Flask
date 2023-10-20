@@ -63,6 +63,9 @@ def zpracuj_registraci():
         })
         save_data()
         message = 'Registrace byla úspěšně uložena.'
+        # TODO poslat zprávu na discord
+        # bot.send_discord_message('gg')
+        
         status_code = 200
 
     return render_template('druha_stranka.html', message=message), status_code

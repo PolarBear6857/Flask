@@ -30,7 +30,7 @@ async def send_discord_message(message_content):
 
 
 def run_discord_bot():
-    TOKEN = '' # Přidat token
+    TOKEN = 'MTE2NDU5MTc3NzAyMjQ3NjQzMQ.G1Q0rW.0EgCUxoRmLBoHsHgoETNdVRmA_F8i6L8W6jz1A'  # Přidat token
 
     @client.event
     async def on_ready():
@@ -49,6 +49,9 @@ def run_discord_bot():
             await message.channel.send("https://tenor.com/view/wawa-cat-wawawa-meme-gif-25812133")
         if message.content == 'ječná':
             file = discord.File('images/rasicek.png')
+            await message.channel.send(file=file)
+        if message.content == 'evil':
+            file = discord.File('images/evil_vojta.png')
             await message.channel.send(file=file)
         if user_message[0] == '?':
             user_message = user_message[1:]

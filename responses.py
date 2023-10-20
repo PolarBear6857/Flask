@@ -21,5 +21,8 @@ def get_response(message: str):
 
     if message == 'nevím':
         return 'https://tenor.com/view/napoleon-there%27s-nothing-we-can-do-napoleon-pyritesian-gif-17490332095914688011'
-
+    if message == 'ni':
+        return 'https://tenor.com/view/thanos-banned-gif-24526457'
+    if message == 'jirka':
+        return 'https://tenor.com/view/carbonatedlean-minecraft-minecraft-skeleton-skeleton-appears-skeleton-army-gif-11355263577746326205'
 
