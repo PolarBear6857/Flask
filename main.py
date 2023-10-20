@@ -3,7 +3,6 @@ import threading
 
 from flask import Flask, render_template, request, jsonify
 import json
-import bot
 
 # Inicializace aplikace Flask
 app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
