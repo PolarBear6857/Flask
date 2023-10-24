@@ -1,6 +1,3 @@
-import concurrent
-import threading
-
 from flask import Flask, render_template, request, jsonify
 import json
 
@@ -13,6 +10,17 @@ try:
         registered_people = json.load(file)
 except Exception:
     registered_people = []
+
+try:
+    with open('feedback.json', 'r') as file:
+        feedback = json.load(file)
+except Exception:
+    feedback = []
+
+
+@app.route('/get_reviews', methods=['GET'])
+def get_reviews():
+    return jsonify(feedback)
 
 
 # Pošle email o nové registraci
@@ -63,7 +71,7 @@ def druha_stranka():
 
 @app.route('/feedback', methods=['GET', 'POST'])
 def treti_stranka():
-    return render_template('treti_stranka.html', zprava="Tajná zpráva.."), 200
+    return render_template('treti_stranka.html', feedback=feedback)
 
 
 # Zpracování registrace nové osoby
@@ -115,10 +123,32 @@ def check_nickname(nick):
     return jsonify({'exists': False})
 
 
+# TODO ukládání recenzí do JSON (nebo jiného souboru, ale JSON už jsem jednou použil)
+
+@app.route('/zpracuj_recenzi', methods=['POST'])
+def zpracuj_recenzi():
+    data = request.form
+    nick = data.get('name')
+    comment = data.get('comment')
+
+    feedback.append({
+        'jmeno': nick,
+        'recenze': comment
+    })
+    save_feedback()
+
+    return render_template('treti_stranka.html', message="Recenze odeslána"), 200
+
+
 # Funkce pro uložení dat do JSON souboru
 def save_data():
     with open('registered_people.json', 'w') as file:
         json.dump(registered_people, file)
+
+
+def save_feedback():
+    with open('feedback.json', 'w') as file:
+        json.dump(feedback, file)
 
 
 app.run(host='0.0.0.0', port=8080)

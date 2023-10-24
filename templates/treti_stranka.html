@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
     <!-- Nastavení titulku stránky -->
-    <title>Stránka s recenzemi</title>
+    <title>RECENZE</title>
 
     <!-- Nastavení viewportu pro responzivní design -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -53,6 +53,12 @@
             border-radius: 5px;
         }
 
+        /* Remove bullets for the list of reviews */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
         /* Reagování na menší obrazovky */
         @media only screen and (max-width: 600px) {
             h1 {
@@ -68,6 +74,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 <!-- Odkaz pro návrat -->
@@ -77,7 +84,7 @@
 <h1>Recenze</h1>
 
 <!-- Formulář pro přidání recenze -->
-<form id="reviewForm">
+<form id="reviewForm" action="/zpracuj_recenzi" method="post">
     <h2>Přidejte recenzi</h2>
     <label for="name">Vaše jméno:</label>
     <input type="text" id="name" name="name" required>
@@ -91,42 +98,46 @@
 <!-- Seznam recenzí -->
 <h2>Seznam recenzí:</h2>
 <div id="reviews">
-    <!-- Recenze budou zobrazeny zde -->
+    <!-- Reviews will be dynamically loaded here -->
 </div>
 
 <script>
-    // Pole pro ukládání recenzí
-    let reviews = [];
-
-    // Funkce pro zobrazení recenzí na stránce
+    // Function to fetch and display reviews
+    // Function to fetch and display reviews
     function displayReviews() {
-        const reviewsDiv = document.getElementById("reviews");
-        reviewsDiv.innerHTML = "";
-        reviews.forEach((review, index) => {
-            const reviewElement = document.createElement("div");
-            reviewElement.className = "review";
-            reviewElement.innerHTML = `
-                <strong>Jméno:</strong> ${review.name}<br>
-                <strong>Recenze:</strong> ${review.comment}
-            `
-            reviewsDiv.appendChild(reviewElement);
-        })
+        fetch('/get_reviews')  // This route should return the reviews in JSON format
+            .then(response => response.json())
+            .then(data => {
+                const reviewsDiv = document.getElementById("reviews");
+                reviewsDiv.innerHTML = "";
+
+                if (data && data.length > 0) {
+                    const ul = document.createElement("ul");
+                    data.forEach(review => {
+                        const li = document.createElement("li");
+                        li.className = "review";
+                        li.innerHTML = `
+                        <strong>Jméno recenzenta:</strong> ${review.jmeno}<br>
+                        <strong>Recenze:</strong> ${review.recenze}<br>
+                    `;
+                        ul.appendChild(li);
+                    });
+                    reviewsDiv.appendChild(ul);
+                } else {
+                    const noReviews = document.createElement("p");
+                    noReviews.className = "no-reviews";
+                    noReviews.textContent = "Žádné recenze nejsou k dispozici.";
+                    reviewsDiv.appendChild(noReviews);
+                }
+            });
     }
 
-    // Obsluha odeslání formuláře
-    const reviewForm = document.getElementById("reviewForm");
-    reviewForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const name = document.getElementById("name").value;
-        const comment = document.getElementById("comment").value;
-        reviews.push({name, comment});
-        displayReviews();
-        reviewForm.reset();
-    });
 
-    // Zobrazit počáteční recenze, pokud jsou nějaké k dispozici
+    // Initial call to display reviews
     displayReviews();
-</script>
 
+    // Periodically refresh the reviews (e.g., every 5 seconds)
+    setInterval(displayReviews, 5000);
+</script>
 </body>
 </html>
