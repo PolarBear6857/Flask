@@ -9,20 +9,17 @@
 
     <!-- Stylování stránky pomocí CSS -->
     <style>
-        /* Základní styl pro celou stránku */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f2f2f2;
         }
 
-        /* Styl nadpisu první úrovně */
         h1 {
             color: #007BFF;
             font-size: 24px;
         }
 
-        /* Styl odkazů */
         a {
             display: inline-block;
             padding: 10px 20px;
@@ -34,7 +31,6 @@
             font-size: 18px;
         }
 
-        /* Styl pro zobrazování recenzí */
         .review {
             border: 3px solid black;
             max-width: 400px;
@@ -43,7 +39,6 @@
             font-size: 18px;
         }
 
-        /* Styl pro formulář */
         form {
             max-width: 400px;
             margin: 0 auto;
@@ -53,13 +48,11 @@
             border-radius: 5px;
         }
 
-        /* Remove bullets for the list of reviews */
         ul {
             list-style: none;
             padding: 0;
         }
 
-        /* Reagování na menší obrazovky */
         @media only screen and (max-width: 600px) {
             h1 {
                 font-size: 200%;
@@ -95,17 +88,23 @@
     <input type="submit" value="Odeslat recenzi">
 </form>
 
+<br>
+<!-- Zpráva v případě úspěšné registrace -->
+{% if message %}
+    <p style="font-weight: bolder">{{ message }}</p>
+{% endif %}
+<br>
+
 <!-- Seznam recenzí -->
 <h2>Seznam recenzí:</h2>
 <div id="reviews">
-    <!-- Reviews will be dynamically loaded here -->
+    <!-- Zde se ukážou recenze -->
 </div>
 
 <script>
-    // Function to fetch and display reviews
-    // Function to fetch and display reviews
+    // Funkce pro zobrazení recenzí
     function displayReviews() {
-        fetch('/get_reviews')  // This route should return the reviews in JSON format
+        fetch('/get_reviews')
             .then(response => response.json())
             .then(data => {
                 const reviewsDiv = document.getElementById("reviews");
@@ -132,11 +131,7 @@
             });
     }
 
-
-    // Initial call to display reviews
     displayReviews();
-
-    // Periodically refresh the reviews (e.g., every 5 seconds)
     setInterval(displayReviews, 5000);
 </script>
 </body>

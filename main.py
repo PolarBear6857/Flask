@@ -24,6 +24,7 @@ except Exception:
     feedback = []
 
 
+# Načte recenze z JSON souboru
 @app.route('/get_reviews', methods=['GET'])
 def get_reviews():
     return jsonify(feedback)
@@ -63,7 +64,7 @@ def send_email():
         server.quit()
 
 
-# Hlavní stránka - zobrazuje seznam registrovaných osob
+# Hlavní stránka
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('prvni_stranka.html', registered_people=registered_people), 200
@@ -75,6 +76,7 @@ def druha_stranka():
     return render_template('druha_stranka.html', zprava="Tajná zpráva.."), 200
 
 
+# Stránka pro recenze
 @app.route('/feedback', methods=['GET', 'POST'])
 def treti_stranka():
     return render_template('treti_stranka.html', feedback=feedback)
@@ -128,7 +130,7 @@ def zpracuj_registraci():
     return render_template('druha_stranka.html', message=message), status_code
 
 
-# API pro ověření dostupnosti jména
+# Ověření dostupnosti jména
 @app.route('/api/check-nickname/<nick>', methods=['GET'])
 def check_nickname(nick):
     if any(person['nick'] == nick for person in registered_people):
@@ -136,27 +138,32 @@ def check_nickname(nick):
     return jsonify({'exists': False})
 
 
+# Zpracování recenze
 @app.route('/zpracuj_recenzi', methods=['POST'])
 def zpracuj_recenzi():
     data = request.form
     nick = data.get('name')
     comment = data.get('comment')
+    if nick in registrovani_lide:
+        feedback.append({
+            'jmeno': nick,
+            'recenze': comment
+        })
+        save_feedback()
+        message = "Recenze odeslána"
+    else:
+        message = "Tento člověk není registrovaný"
 
-    feedback.append({
-        'jmeno': nick,
-        'recenze': comment
-    })
-    save_feedback()
-
-    return render_template('treti_stranka.html', message="Recenze odeslána"), 200
+    return render_template('treti_stranka.html', message=message), 200
 
 
-# Funkce pro uložení dat do JSON souboru
+# Funkce pro uložení uživatelů do JSON souboru
 def save_data():
     with open('registered_people.json', 'w') as file:
         json.dump(registered_people, file)
 
 
+# Funkce pro uložení recenzí do JSON souboru
 def save_feedback():
     with open('feedback.json', 'w') as file:
         json.dump(feedback, file)

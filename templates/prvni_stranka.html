@@ -9,20 +9,17 @@
 
     <!-- Stylování stránky pomocí CSS -->
     <style>
-        /* Základní styl pro celou stránku */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f2f2f2;
         }
 
-        /* Styl nadpisu první úrovně */
         h1 {
             color: #007BFF;
             font-size: 24px;
         }
 
-        /* Styl odkazů */
         a {
             display: inline-block;
             padding: 10px 20px;
@@ -34,7 +31,6 @@
             font-size: 18px;
         }
 
-        /* Styl pro zobrazování účastníků */
         .participant {
             border: 3px solid black;
             max-width: 400px;
@@ -43,7 +39,6 @@
             font-size: 18px;
         }
 
-        /* Reagování na menší obrazovky */
         @media only screen and (max-width: 600px) {
             h1 {
                 font-size: 200%;
@@ -66,22 +61,22 @@
 <!-- Seznam registrovaných účastníků -->
 <h2>Seznam registrovaných účastníků:</h2>
 {% if registered_people %}
-<ul>
-    <!-- Cyklus pro zobrazení údajů o účastnících -->
-    {% for ucastnik in registered_people %}
-    <p class="participant">
-        <strong>Přezdívka osoby:</strong> {{ ucastnik['nick'] }}<br>
-        <strong>Plavat umí:</strong> {{ "Ano" if ucastnik['je_plavec'] else "Ne" }}<br>
-        <!-- Podmíněné zobrazení kamaráda na lodi -->
-        {% if ucastnik['kanoe_kamarad'] %}
-        <strong>S kým by chtěl/a být na lodi:</strong> {{ ucastnik['kanoe_kamarad'] }}
-        {% endif %}
-    </p>
-    {% endfor %}
-</ul>
+    <ul>
+        <!-- Cyklus pro zobrazení údajů o účastnících -->
+        {% for ucastnik in registered_people %}
+            <p class="participant">
+                <strong>Přezdívka osoby:</strong> {{ ucastnik['nick'] }}<br>
+                <strong>Plavat umí:</strong> {{ "Ano" if ucastnik['je_plavec'] else "Ne" }}<br>
+                <!-- Podmíněné zobrazení kamaráda na lodi -->
+                {% if ucastnik['kanoe_kamarad'] %}
+                    <strong>S kým by chtěl/a být na lodi:</strong> {{ ucastnik['kanoe_kamarad'] }}
+                {% endif %}
+            </p>
+        {% endfor %}
+    </ul>
 {% else %}
-<!-- Zpráva v případě, že nejsou žádní účastníci -->
-<p class="no-participants">Žádní účastníci nejsou zatím přihlášeni.</p>
+    <!-- Zpráva v případě, že nejsou žádní účastníci -->
+    <p class="no-participants">Žádní účastníci nejsou zatím přihlášeni.</p>
 {% endif %}
 
 <!-- Odkaz na stránku pro registraci -->

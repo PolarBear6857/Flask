@@ -9,19 +9,16 @@
 
     <!-- Stylování stránky pomocí CSS -->
     <style>
-        /* Základní styl pro celou stránku */
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f2f2f2;
         }
 
-        /* Styl pro nadpis první úrovně */
         h1 {
             color: #007BFF;
         }
 
-        /* Styl pro formulář */
         form {
             max-width: 400px;
             margin: 0 auto;
@@ -30,13 +27,11 @@
             border-radius: 5px;
         }
 
-        /* Styl pro popisky formulářových polí */
         label {
             display: block;
             text-align: left;
         }
 
-        /* Styl pro vstupní textová pole a výběrové seznamy */
         input[type="text"],
         select {
             width: 100%;
@@ -46,7 +41,6 @@
             border-radius: 3px;
         }
 
-        /* Styl pro tlačítko odeslání formuláře */
         input[type="submit"] {
             background-color: #007BFF;
             color: white;
@@ -57,7 +51,6 @@
             cursor: pointer;
         }
 
-        /* Styl pro odkazy */
         a {
             display: inline-block;
             margin-top: 10px;
@@ -65,7 +58,6 @@
             color: #007BFF;
         }
 
-        /* Reagování na menší obrazovky */
         @media only screen and (max-width: 600px) {
             h1 {
                 font-size: 200%;
@@ -138,7 +130,7 @@
 
 <!-- Zpráva v případě úspěšné registrace -->
 {% if message %}
-<p>{{ message }}</p>
+    <p>{{ message }}</p>
 {% endif %}
 
 <!-- JavaScript pro ověření dostupnosti přezdívky -->
