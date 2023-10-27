@@ -4,10 +4,16 @@ import json
 # Inicializace aplikace Flask
 app = Flask(__name__, static_url_path='/static', static_folder='static', template_folder='templates')
 
+registrovani_lide = set()
+registrovani_spolecnici = set()
+
 # Pokusíme se načíst data z JSON souboru, pokud neexistuje, vytvoříme prázdný seznam
 try:
     with open('registered_people.json', 'r') as file:
         registered_people = json.load(file)
+        for clovek in registered_people:
+            registrovani_lide.add(clovek['nick'])
+        print(registrovani_lide)  # TODO debug
 except Exception:
     registered_people = []
 
@@ -95,22 +101,29 @@ def zpracuj_registraci():
     elif kanoe_kamarad and not (kanoe_kamarad.isalnum() and 2 <= len(kanoe_kamarad) <= 20):
         message = 'Kamarád na lodi musí obsahovat pouze písmena a číslice a mít délku 2 až 20 znaků.'
         status_code = 400
-    elif any(person['nick'] == nick for person in registered_people):
-        message = 'Toto jméno už je obsazené'
+    elif kanoe_kamarad and kanoe_kamarad in registrovani_spolecnici:
+        message = "Chyba: Společník na lodi byl již vybrán jiným účastníkem."
         status_code = 400
     else:
-        registered_people.append({
-            'nick': nick,
-            'jmeno': jmeno,
-            'prijmeni': prijmeni,
-            'pohlavi': pohlavi,
-            'je_plavec': je_plavec,
-            'kanoe_kamarad': kanoe_kamarad
-        })
-        save_data()
-        message = 'Registrace byla úspěšně uložena.'
-        send_email()
-        status_code = 200
+        is_kamarad_assigned = any(
+            person['kanoe_kamarad'] == kanoe_kamarad for person in registered_people if 'kanoe_kamarad' in person)
+        if is_kamarad_assigned and kanoe_kamarad:
+            message = "Chyba: Společník na lodi je již společníkem někoho jiného."
+            status_code = 400
+        else:
+            registrovani_spolecnici.add(kanoe_kamarad)
+            registered_people.append({
+                'nick': nick,
+                'jmeno': jmeno,
+                'prijmeni': prijmeni,
+                'pohlavi': pohlavi,
+                'je_plavec': je_plavec,
+                'kanoe_kamarad': kanoe_kamarad
+            })
+            save_data()
+            message = 'Registrace byla úspěšně uložena.'
+            # send_email() TODO zapnout
+            status_code = 200
 
     return render_template('druha_stranka.html', message=message), status_code
 
