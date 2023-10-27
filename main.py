@@ -123,8 +123,6 @@ def check_nickname(nick):
     return jsonify({'exists': False})
 
 
-# TODO ukládání recenzí do JSON (nebo jiného souboru, ale JSON už jsem jednou použil)
-
 @app.route('/zpracuj_recenzi', methods=['POST'])
 def zpracuj_recenzi():
     data = request.form
