@@ -106,6 +106,9 @@ def zpracuj_registraci():
     elif kanoe_kamarad and kanoe_kamarad in registrovani_spolecnici:
         message = "Chyba: Společník na lodi byl již vybrán jiným účastníkem."
         status_code = 400
+    elif kanoe_kamarad == nick:
+        message = "Chyba: Společník na lodi nemůže mít stejný nick jako právě registrovaný uživatel"
+        status_code = 400
     else:
         is_kamarad_assigned = any(
             person['kanoe_kamarad'] == kanoe_kamarad for person in registered_people if 'kanoe_kamarad' in person)
